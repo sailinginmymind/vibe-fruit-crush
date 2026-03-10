@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fruit Vibe Crush</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+
+    <div id="timer-container">
+        <div id="timer-bar"></div>
+    </div>
+
+    <div id="game-ui">
+    <h1 class="game-title">FRUIT CRUSH</h1>
+    <div class="score-board">
+        PUNTI: <span id="score">0</span> | 
+        <span class="best-score-label">BEST: <span id="best-score">0</span></span>
+    </div>
+</div>
+    <div id="grid"></div>
+
+    <div id="game-over-screen" class="hidden">
+        <div class="modal">
+            <h1>TEMPO SCADUTO</h1>
+            <p>Punteggio Finale</p>
+            <div id="final-score">0</div>
+            <button id="restart-btn">GIOCA ANCORA</button>
+        </div>
+    </div>
+    
+
+    <script src="script.js"></script>
+</body>
+</html>
