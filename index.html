@@ -2,10 +2,11 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fruit Vibe Crush</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">    
+<title>Fruit Vibe Crush</title>
     <link rel="stylesheet" href="style.css">
 </head>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <body>
     
     <div id="main-menu">
@@ -87,23 +88,34 @@
         </div>
     </div>
 
-    <div id="game-container">
-        <div id="game-ui">
-            <h1 class="game-title">FRUIT CRUSH</h1>
-            <div class="score-board">
-                PUNTI: <span id="score">0</span> | 
-                <span id="multiplier-display">x1</span> | 
-                <span class="best-score-label">BEST: <span id="best-score">0</span></span>
-            </div>
-            <button id="pause-btn" class="hidden">PAUSA</button>
-        </div>
-
+   <div id="game-container">
+    <div id="game-header">
+        <h1 class="game-title">FRUIT <span class="neon">CRUSH</span></h1>
+        
+<div class="stats-bar">
+<div class="stat-box">
+    <span class="stat-label">RECORD</span>
+    <div id="best-score" class="stat-value" style="color: #ffcc00;">0</div>
+</div>
+    <div class="stat-box">
+        <span class="stat-label">PUNTI</span>
+        <div id="score" class="stat-value">0</div>
+    </div>
+    
+    <div class="stat-box">
+        <span class="stat-label">COMBO</span>
+        <div id="multiplier-display" class="stat-value neon-text">x1</div>
+    </div>
+</div>
         <div id="timer-container">
             <div id="timer-bar"></div>
         </div>
 
-        <div id="grid"></div>
+        <button id="pause-btn" class="hidden">MENU </button>
     </div>
+
+    <div id="grid"></div>
+</div>
 
     <script src="script.js"></script>
 </body>

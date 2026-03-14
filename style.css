@@ -288,6 +288,26 @@ select option {
     20% { transform: translateY(-20px) scale(1.2); opacity: 1; }
     100% { transform: translateY(-60px) scale(1); opacity: 0; }
 }
+/* Stile per le scritte combo volanti */
+.combo-popup {
+    position: fixed; /* O absolute, purché gestito via JS */
+    pointer-events: none;
+    font-weight: 900;
+    text-transform: uppercase;
+    z-index: 1000;
+    text-align: center;
+    white-space: nowrap;
+    animation: comboFloat 0.8s ease-out forwards;
+    /* Font dinamico: minimo 1.5rem, massimo 3rem */
+    font-size: clamp(1.5rem, 6vw, 3rem);
+    text-shadow: 0 0 10px rgba(0,0,0,0.5), 0 0 20px currentColor;
+}
+
+@keyframes comboFloat {
+    0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
+    20% { transform: translate(-50%, -20px) scale(1.2); opacity: 1; }
+    100% { transform: translate(-50%, -60px) scale(1); opacity: 0; }
+}
 /* --- 5. Cascata con Rimbalzo (Juicy Drop) --- */
 .falling {
     animation: fruitBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -425,13 +445,24 @@ select {
     font-size: 2.5rem;
     cursor: pointer;
     user-select: none;
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s;
-    
+    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.2s;
+    position: relative;
+    z-index: 1;    
     /* MIGLIORAMENTI VISIBILITÀ: */
     background: rgba(255, 255, 255, 0.08); /* Sfondo più visibile */
     border: 1px solid rgba(255, 255, 255, 0.1); /* Bordo leggero per separare le celle */
-    border-radius: 12px;
+    border-radius: 8px;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); /* Effetto profondità per far risaltare il frutto */
+    touch-action: none;         /* FONDAMENTALE: blocca lo scroll mentre giochi */
+    -webkit-user-select: none;  /* Blocca selezione testo su iPhone */
+    user-select: none;          /* Blocca selezione testo su Android */
+    -webkit-tap-highlight-color: transparent; /* Toglie il flash azzurro brutto al tocco */
+    
+}
+
+.fruit.swapping {
+    z-index: 10;
+    filter: brightness(1.3);
 }
 /* SELEZIONE E ANIMAZIONI */
 .selected {
@@ -484,11 +515,6 @@ select {
     100% { transform: translate(var(--dx), var(--dy)) rotate(360deg) scale(0); opacity: 0; }
 }
 
-.fruit:empty {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.02);
-}
-
 @keyframes pop {
     0% { transform: scale(1); }
     50% { transform: scale(1.4); filter: brightness(1.5); }
@@ -497,11 +523,19 @@ select {
 
 /* Classe per l'animazione di sparizione */
 .exploding {
-    transform: scale();
+    transform: scale(0);
     opacity: 0;
-    transition: all 0.25s ease-out;
+    transition: transform 0.25s ease-out, opacity 0.2s ease-out;
+}
+/* Animazione per la caduta dei nuovi frutti */
+@keyframes slideDown {
+    0% { transform: translateY(-20px); opacity: 0.5; }
+    100% { transform: translateY(0); opacity: 1; }
 }
 
+.fruit.falling {
+    animation: slideDown 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
 /* Effetto di caduta (opzionale: un piccolo rimbalzo) */
 .falling {
     animation: slideDown 0.3s ease-out;
@@ -537,23 +571,17 @@ select {
 /* RESPONSIVE PER IL TELEFON0 */
 @media (max-width: 500px) {
     #grid {
-        /* 11vw assicura che 8 frutti entrino perfettamente in larghezza */
         grid-template-columns: repeat(8, 11vw);
         grid-template-rows: repeat(8, 11vw);
-        gap: 5px;
-        padding: 10px;
+        gap: 4px; /* Un po' meno gap su mobile per guadagnare spazio */
+        padding: 8px;
+        width: 92vw; /* Assicura che la griglia non tocchi i bordi fisici del telefono */
+        margin: 0 auto;
     }
     .fruit {
         width: 11vw;
         height: 11vw;
-        font-size: 1.8rem;
-    }
-    .game-title { font-size: 1.4rem; }
-    #pause-btn {
-        top: 15px;
-        right: 15px;
-        padding: 8px 15px;
-        font-size: 0.8rem;
+        font-size: 1.6rem; /* Emoji leggermente più piccole per non toccare i bordi della cella */
     }
 }
 
@@ -636,4 +664,154 @@ select {
     .score-board {
         font-size: 1rem;
     }
+}
+
+/* Container della testata */
+#game-header {
+    width: 95vw;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Titolo gigante adattabile */
+.game-title {
+    font-size: clamp(2rem, 8vw, 3rem); /* Si ingrandisce in base allo schermo */
+    margin: 10px 0;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0,255,204,0.3);
+}
+
+.neon {
+    color: #00ffcc;
+    text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+}
+
+/* La barra con i box affiancati */
+.stats-bar {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.stat-box {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 8px;
+    flex: 1; /* Fa sì che i box siano uguali tra loro */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: #00ffcc;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    font-size: 1.8rem; /* Numeri belli grandi */
+    font-weight: 900;
+    color: #fff;
+}
+
+.neon-text {
+    color: #ff00ff;
+    text-shadow: 0 0 10px #ff00ff;
+}
+
+/* Nascondi il record su telefoni molto piccoli per non affollare */
+@media (max-width: 360px) {
+    .hide-mobile { display: none; }
+}
+
+/* Container principale sempre centrato */
+#game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra tutto orizzontalmente */
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#game-header {
+    width: 100%;
+    max-width: 400px; /* Larghezza ideale per la leggibilità */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game-title {
+    font-size: 2.8rem;
+    margin: 15px 0;
+    text-align: center;
+}
+
+/* La barra punti occupa tutta la larghezza disponibile del header */
+.stats-bar {
+    display: flex;
+    justify-content: center; /* Centra i box tra loro */
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.stat-box {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    padding: 12px;
+    min-width: 100px; /* Evita che i box diventino troppo stretti */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid rgba(0, 255, 204, 0.2);
+}
+
+.stat-value {
+    font-size: 2.2rem; /* Punti giganti */
+    line-height: 1;
+}
+
+/* Timer centrato e fluido */
+#timer-container {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+#pause-btn {
+    background: none;
+    border: 1px solid #aaa;
+    color: #aaa;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+/* Griglia centrata automaticamente */
+#grid {
+    margin: 0 auto;
+    /* ... il resto del tuo stile grid ... */
+}
+
+/* Adattamento per telefoni piccoli */
+@media (max-width: 400px) {
+    .game-title { font-size: 2rem; }
+    .stat-value { font-size: 1.6rem; }
+    .stat-box { padding: 8px; min-width: 80px; }
 }
