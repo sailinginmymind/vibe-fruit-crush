@@ -8,29 +8,102 @@
 </head>
 <body>
     
+    <div id="main-menu">
+        <h1>FRUIT CRUSH</h1>
+        
+        <div class="mode-grid">
+            <button class="mode-btn" data-mode="60">
+                <span class="mode-title">CLASSICA</span>
+                <span class="mode-desc">60 secondi di adrenalina</span>
+            </button>
+            <button class="mode-btn" data-mode="30">
+                <span class="mode-title">SFIDA</span>
+                <span class="mode-desc">Riesci a fare punti in 30s?</span>
+            </button>
+            <button class="mode-btn" data-mode="10">
+                <span class="mode-title">BLITZ</span>
+                <span class="mode-desc">10 secondi. Ogni mossa conta!</span>
+            </button>
+            <button class="mode-btn" data-mode="zen">
+                <span class="mode-title">ZEN</span>
+                <span class="mode-desc">Senza tempo, solo relax</span>
+            </button>
+        </div>
 
-    <div id="timer-container">
-        <div id="timer-bar"></div>
+        <button id="options-btn" class="main-options-btn">
+            ⚙️ IMPOSTAZIONI E TEMI
+        </button>
     </div>
 
-    <div id="game-ui">
-    <h1 class="game-title">FRUIT CRUSH</h1>
-    <div class="score-board">
-        PUNTI: <span id="score">0</span> | 
-        <span class="best-score-label">BEST: <span id="best-score">0</span></span>
+    <div id="options-menu" class="hidden">
+        <div class="modal">
+            <h2>OPZIONI</h2>
+            
+            <div class="option-item">
+                <label>Velocità Difficoltà: <span id="speed-value">Normale</span></label>
+                <input type="range" id="speed-slider" min="1" max="3" value="1" step="1">
+            </div>
+
+            <div class="option-item">
+                <label>Tema Frutti:</label>
+                <select id="theme-select">
+                    <optgroup label="Classici">
+                        <option value="classic1">Classico (Alto Contrasto)</option>
+                        <option value="classic2">Classico (Originale)</option>
+                    </optgroup>
+                    <optgroup label="Divertenti">
+                        <option value="pastello">Dolciumi 🍬</option>
+                        <option value="animali1">Natura 🐢</option>
+                        <option value="animali2">Cuccioli 🐶</option>
+                        <option value="oggetti">Mistero 💎</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="option-item" style="flex-direction: row; justify-content: space-between; align-items: center;">
+                <label>Musica:</label>
+                <input type="checkbox" id="music-toggle" checked>
+            </div>
+
+            <button id="back-to-menu" class="menu-btn">SALVA E TORNA</button>
+        </div>
     </div>
-</div>
-    <div id="grid"></div>
+
+    <div id="pause-screen" class="hidden">
+        <div class="modal">
+            <h1>PAUSA</h1>
+            <button id="resume-btn" class="menu-btn">RIPRENDI</button>
+            <button id="options-pause-btn" class="menu-btn secondary">OPZIONI</button>
+            <button id="quit-to-menu-btn" class="menu-btn secondary">TORNA AL MENU</button>
+        </div>
+    </div>
 
     <div id="game-over-screen" class="hidden">
         <div class="modal">
-            <h1>TEMPO SCADUTO</h1>
-            <p>Punteggio Finale</p>
+            <h1>FINE PARTITA</h1>
             <div id="final-score">0</div>
             <button id="restart-btn">GIOCA ANCORA</button>
+            <button id="quit-after-game-btn" class="menu-btn secondary">MENU PRINCIPALE</button>
         </div>
     </div>
-    
+
+    <div id="game-container">
+        <div id="game-ui">
+            <h1 class="game-title">FRUIT CRUSH</h1>
+            <div class="score-board">
+                PUNTI: <span id="score">0</span> | 
+                <span id="multiplier-display">x1</span> | 
+                <span class="best-score-label">BEST: <span id="best-score">0</span></span>
+            </div>
+            <button id="pause-btn" class="hidden">PAUSA</button>
+        </div>
+
+        <div id="timer-container">
+            <div id="timer-bar"></div>
+        </div>
+
+        <div id="grid"></div>
+    </div>
 
     <script src="script.js"></script>
 </body>
